@@ -11,12 +11,14 @@ import LessonRoutes from "./Kambaz/Lessons/routes.js";
 import AssignmentRoutes from "./Kambaz/Assignments/routes.js";
 
 const app = express();
-app.use(
- cors({
-   credentials: true,
-   origin: process.env.NETLIFY_URL || "http://localhost:5173",
- })
-);
+
+ app.set("trust proxy", 1);
+ app.use(
+   cors({
+     credentials: true,
+     origin: (origin, cb) => cb(null, true),
+   })
+ );
 
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
