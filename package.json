@@ -1,0 +1,36 @@
+{
+  "type": "module",
+  "name": "kambaz-node-server-app",
+  "version": "1.0.0",
+  "description": "Node.js Server for Kambaz App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajgupta2965/kambaz-node-server-app.git"
+  },
+  "keywords": [
+    "Node",
+    "REST",
+    "Server",
+    "HTTP",
+    "Web",
+    "Development"
+  ],
+  "author": "Raj Gupta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajgupta2965/kambaz-node-server-app/issues"
+  },
+  "homepage": "https://github.com/rajgupta2965/kambaz-node-server-app#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "uuid": "^11.1.0"
+  }
+}
