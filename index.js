@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === "production") {
   sessionOptions.cookie = {
     sameSite: "none",
     secure: true,
-    ...(process.env.NODE_SERVER_DOMAIN ? { domain: process.env.NODE_SERVER_DOMAIN } : {}),
+    partitioned: true,
   };
 }
 
