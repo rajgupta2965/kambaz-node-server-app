@@ -1,15 +1,15 @@
-import Database from "../Database/index.js";
+import AssignmentModel from "./model.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const findAssignmentsForCourse = (courseId) =>
-  (Database.assignments || []).filter((a) => a.course === courseId);
+  AssignmentModel.find({ course: courseId });
 
 export const findAssignmentById = (assignmentId) =>
-  (Database.assignments || []).find((a) => a._id === assignmentId);
+  AssignmentModel.findById(assignmentId);
 
-export const createAssignment = (assignment) => {
+export const createAssignment = async (assignment) => {
   const newAssignment = {
-    _id: uuidv4(),
+    _id: assignment._id ?? uuidv4(),
     title: "New Assignment",
     desc: "",
     points: typeof assignment.points === "number" ? assignment.points : 100,
@@ -21,20 +21,15 @@ export const createAssignment = (assignment) => {
     endDate: assignment.endDate ?? "",
     ...assignment,
   };
-  Database.assignments = [...(Database.assignments || []), newAssignment];
-  return newAssignment;
+  return AssignmentModel.create(newAssignment);
 };
 
-export const updateAssignment = (assignmentId, updates = {}) => {
-  const list = Database.assignments || [];
-  const idx = list.findIndex((a) => a._id === assignmentId);
-  if (idx < 0) return false;
-  list[idx] = { ...list[idx], ...updates };
-  return list[idx];
-};
+export const updateAssignment = (assignmentId, updates = {}) =>
+  AssignmentModel.findOneAndUpdate({ _id: assignmentId }, updates, {
+    new: true,
+  });
 
-export const deleteAssignment = (assignmentId) => {
-  const before = (Database.assignments || []).length;
-  Database.assignments = (Database.assignments || []).filter((a) => a._id !== assignmentId);
-  return Database.assignments.length < before;
+export const deleteAssignment = async (assignmentId) => {
+  const res = await AssignmentModel.deleteOne({ _id: assignmentId });
+  return res.deletedCount === 1;
 };

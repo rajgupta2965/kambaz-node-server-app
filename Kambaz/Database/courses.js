@@ -89,6 +89,4 @@ export default [
     "description": "This course introduces the principles and practices of securing computer networks. Topics include cryptography, authentication, firewalls, intrusion detection systems, VPNs, and protection against common network attacks. Students will explore modern security challenges in wireless, mobile, and cloud environments, and develop practical skills for safeguarding networked systems.",
     "image": "networkSec.png"
   }
-
-
 ]

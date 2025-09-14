@@ -1,31 +1,42 @@
 import * as modulesDao from "./dao.js";
-import * as lessonsDao from "../Lessons/dao.js";
 
 export default function ModuleRoutes(app) {
-  app.put("/api/modules/:moduleId", async (req, res) => {
+  const updateModule = async (req, res) => {
     const { moduleId } = req.params;
     const moduleUpdates = req.body;
     const status = await modulesDao.updateModule(moduleId, moduleUpdates);
     res.send(status);
-  })
+  };
 
-  app.delete("/api/modules/:moduleId", async (req, res) => {
+  const deleteModule = async (req, res) => {
     const { moduleId } = req.params;
     const status = await modulesDao.deleteModule(moduleId);
     res.send(status);
-  });
+  };
 
-  app.get("/api/modules/:moduleId/lessons", (req, res) => {
-    const { moduleId } = req.params;
-    const lessons = lessonsDao.findLessonsForModule(moduleId);
-    res.json(lessons);
-  });
-
-  app.post("/api/modules/:moduleId/lessons", (req, res) => {
+  const createLesson = async (req, res) => {
     const { moduleId } = req.params;
     const payload = req.body ?? {};
-    const created = lessonsDao.createLesson({ ...payload, module: moduleId });
+    const created = await modulesDao.createLesson(moduleId, payload);
     res.json(created);
-  });
+  };
 
+  const updateLesson = async (req, res) => {
+    const { moduleId, lessonId } = req.params;
+    const updates = req.body ?? {};
+    const status = await modulesDao.updateLesson(moduleId, lessonId, updates);
+    res.send(status);
+  };
+
+  const deleteLesson = async (req, res) => {
+    const { moduleId, lessonId } = req.params;
+    const status = await modulesDao.deleteLesson(moduleId, lessonId);
+    res.send(status);
+  };
+
+  app.put("/api/modules/:moduleId", updateModule);
+  app.delete("/api/modules/:moduleId", deleteModule);
+  app.post("/api/modules/:moduleId/lessons", createLesson);
+  app.put("/api/modules/:moduleId/lessons/:lessonId", updateLesson);
+  app.delete("/api/modules/:moduleId/lessons/:lessonId", deleteLesson);
 }

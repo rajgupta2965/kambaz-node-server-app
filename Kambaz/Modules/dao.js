@@ -1,25 +1,56 @@
-import Database from "../Database/index.js";
+import model from "./model.js";
 import { v4 as uuidv4 } from "uuid";
 
 export function findModulesForCourse(courseId) {
-  const { modules } = Database;
-  return modules.filter((module) => module.course === courseId);
+  return model.find({ course: courseId });
 };
 
 export function createModule(module) {
   const newModule = { ...module, _id: uuidv4() };
-  Database.modules = [...Database.modules, newModule];
-  return newModule;
+  return model.create(newModule);
 };
 
 export function updateModule(moduleId, moduleUpdates) {
-  const { modules } = Database;
-  const module = modules.find((module) => module._id === moduleId);
-  Object.assign(module, moduleUpdates);
-  return module;
+  return model.updateOne({ _id: moduleId }, moduleUpdates);
 };
 
 export function deleteModule(moduleId) {
- const { modules } = Database;
- Database.modules = modules.filter((module) => module._id !== moduleId);
+  return model.deleteOne({ _id: moduleId });
 };
+
+export async function createLesson(moduleId, lesson = {}) {
+  const newLesson = {
+    _id: lesson._id ?? uuidv4(),
+    name: lesson.name ?? "New Lesson",
+    description: lesson.description ?? "",
+    module: moduleId,
+  };
+  await model.updateOne(
+    { _id: moduleId },
+    { $push: { lessons: newLesson } }
+  );
+  return newLesson;
+}
+
+export function updateLesson(moduleId, lessonId, lessonUpdates = {}) {
+  const { _id, module, ...rest } = lessonUpdates;
+  const $set = Object.entries({ ...rest, module: moduleId }).reduce(
+    (acc, [k, v]) => {
+      acc[`lessons.$[l].${k}`] = v;
+      return acc;
+    },
+    {}
+  );
+  return model.updateOne(
+    { _id: moduleId },
+    { $set },
+    { arrayFilters: [{ "l._id": lessonId }] }
+  );
+}
+
+export function deleteLesson(moduleId, lessonId) {
+  return model.updateOne(
+    { _id: moduleId },
+    { $pull: { lessons: { _id: lessonId } } }
+  );
+}

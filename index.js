@@ -8,21 +8,35 @@ import session from "express-session";
 import UserRoutes from "./Kambaz/Users/routes.js";
 import CourseRoutes from "./Kambaz/Courses/routes.js";
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
-import LessonRoutes from "./Kambaz/Lessons/routes.js";
 import AssignmentRoutes from "./Kambaz/Assignments/routes.js";
 
-const CONNECTION_STRING = process.env.DATABASE_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz"
+// Prefer MONGODB_URI (Render/Atlas), fallback to DATABASE_CONNECTION_STRING, then local
+const CONNECTION_STRING =
+  process.env.MONGODB_URI ||
+  process.env.DATABASE_CONNECTION_STRING ||
+  "mongodb://127.0.0.1:27017/kambaz";
 mongoose.connect(CONNECTION_STRING);
+mongoose.set("debug", true);
 
 const app = express();
 
- app.set("trust proxy", 1);
- app.use(
-   cors({
-     credentials: true,
-     origin: (origin, cb) => cb(null, true),
-   })
- );
+app.set("trust proxy", 1);
+const ALLOWED = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    credentials: true,
+    origin: (origin, cb) => {
+      if (!origin || ALLOWED.length === 0 || ALLOWED.includes(origin)) {
+        return cb(null, true);
+      }
+      return cb(null, false);
+    },
+  })
+);
 
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
@@ -45,9 +59,8 @@ app.use(express.json());
 UserRoutes(app);
 CourseRoutes(app);
 ModuleRoutes(app);
-LessonRoutes(app);
 AssignmentRoutes(app);
 Lab5(app);
 Hello(app);
 
-app.listen(process.env.PORT || 4000)
+app.listen(process.env.PORT || 4000);
