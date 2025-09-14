@@ -11,8 +11,6 @@ const module = {
 };
 
 export default function WorkingWithObjects(app) {
-  
-  //-------------------------Assignment Object------------------------------
   app.get("/lab5/assignment", (req, res) => {
     res.json(assignment);
   });
@@ -36,7 +34,6 @@ export default function WorkingWithObjects(app) {
     res.json(assignment);
   });
 
-  //--------------------------Module Object---------------------------
   app.get("/lab5/module", (req, res) => {
     res.json(module);
   });

@@ -10,7 +10,6 @@ import CourseRoutes from "./Kambaz/Courses/routes.js";
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import AssignmentRoutes from "./Kambaz/Assignments/routes.js";
 
-// Prefer MONGODB_URI (Render/Atlas), fallback to DATABASE_CONNECTION_STRING, then local
 const CONNECTION_STRING =
   process.env.MONGODB_URI ||
   process.env.DATABASE_CONNECTION_STRING ||
@@ -43,7 +42,6 @@ const sessionOptions = {
   resave: false,
   saveUninitialized: false,
 };
-
 if (process.env.NODE_ENV === "production") {
   sessionOptions.proxy = true;
   sessionOptions.cookie = {

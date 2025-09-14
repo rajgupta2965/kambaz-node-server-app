@@ -93,5 +93,4 @@ export default function WorkingWithArrays(app) {
     }
     res.json(todos);
   });
-
 };
