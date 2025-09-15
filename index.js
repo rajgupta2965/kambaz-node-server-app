@@ -11,11 +11,9 @@ import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import AssignmentRoutes from "./Kambaz/Assignments/routes.js";
 
 const CONNECTION_STRING =
-  process.env.MONGODB_URI ||
   process.env.DATABASE_CONNECTION_STRING ||
   "mongodb://127.0.0.1:27017/kambaz";
 mongoose.connect(CONNECTION_STRING);
-mongoose.set("debug", true);
 
 const app = express();
 
