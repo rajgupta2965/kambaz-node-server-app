@@ -9,6 +9,7 @@ import UserRoutes from "./Kambaz/Users/routes.js";
 import CourseRoutes from "./Kambaz/Courses/routes.js";
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import AssignmentRoutes from "./Kambaz/Assignments/routes.js";
+import QuizRoutes from "./Kambaz/Quizzes/routes.js";
 
 const CONNECTION_STRING =
   process.env.DATABASE_CONNECTION_STRING ||
@@ -56,6 +57,7 @@ UserRoutes(app);
 CourseRoutes(app);
 ModuleRoutes(app);
 AssignmentRoutes(app);
+QuizRoutes(app);
 Lab5(app);
 Hello(app);
 
